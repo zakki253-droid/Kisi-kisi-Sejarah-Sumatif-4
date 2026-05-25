@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuis Sejarah Kelas XI — Sumatif 4</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7F4EF;
+    --surface: #FFFFFF;
+    --primary: #1A3A2A;
+    --accent: #C8873A;
+    --accent-light: #F5E6D0;
+    --text: #1A1A1A;
+    --text-muted: #6B6B6B;
+    --border: #E0DBD3;
+    --benar-bg: #EAF4EC;
+    --benar-border: #2D7A45;
+    --benar-text: #1A4A2A;
+    --salah-bg: #FCECEA;
+    --salah-border: #C0392B;
+    --salah-text: #5C1A14;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* HEADER */
+  .site-header {
+    background: var(--primary);
+    color: #fff;
+    padding: 28px 24px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .site-header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(200,135,58,0.18);
+  }
+  .site-header::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: -30px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: rgba(200,135,58,0.12);
+  }
+  .header-badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 99px;
+    margin-bottom: 10px;
+  }
+  .site-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 5vw, 32px);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    position: relative;
+  }
+  .site-header p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+    margin-top: 6px;
+    position: relative;
+  }
+
+  /* PROGRESS */
+  .progress-section {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .progress-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary);
+    white-space: nowrap;
+    min-width: 80px;
+  }
+  .progress-bar-bg {
+    flex: 1;
+    height: 6px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 99px;
+    transition: width 0.4s cubic-bezier(.4,0,.2,1);
+  }
+  .progress-pct {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    min-width: 36px;
+    text-align: right;
+  }
+
+  /* MAIN */
+  .main {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 24px 16px 60px;
+  }
+
+  /* SOAL CARD */
+  .soal-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .soal-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .soal-nomor-badge {
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 99px;
+    letter-spacing: 0.5px;
+  }
+  .soal-text {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+
+  /* OPSI */
+  .opsi-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .opsi-btn {
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 11px 14px;
+    text-align: left;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    line-height: 1.55;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    width: 100%;
+  }
+  .opsi-btn:hover:not(:disabled) {
+    background: var(--accent-light);
+    border-color: var(--accent);
+    transform: translateX(2px);
+  }
+  .opsi-btn:disabled { cursor: default; transform: none; }
+  .opsi-btn.benar {
+    background: var(--benar-bg);
+    border-color: var(--benar-border);
+    color: var(--benar-text);
+  }
+  .opsi-btn.salah {
+    background: var(--salah-bg);
+    border-color: var(--salah-border);
+    color: var(--salah-text);
+  }
+  .opsi-label {
+    font-weight: 600;
+    min-width: 22px;
+    font-size: 13px;
+    opacity: 0.7;
+    padding-top: 1px;
+  }
+
+  /* FEEDBACK */
+  .feedback {
+    margin-top: 14px;
+    padding: 11px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 13.5px;
+    line-height: 1.5;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.benar { background: var(--benar-bg); color: var(--benar-text); border-left: 3px solid var(--benar-border); }
+  .feedback.salah { background: var(--salah-bg); color: var(--salah-text); border-left: 3px solid var(--salah-border); }
+
+  /* NAV */
+  .nav-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .btn-nav {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--text);
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .btn-nav:hover:not(:disabled) { background: var(--bg); border-color: #aaa; }
+  .btn-nav:disabled { opacity: 0.35; cursor: default; }
+  .btn-next {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+    font-weight: 600;
+  }
+  .btn-next:hover:not(:disabled) { background: #0F2A1C; border-color: #0F2A1C; }
+  .soal-counter {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  /* HASIL */
+  .hasil-wrap {
+    display: none;
+  }
+  .hasil-hero {
+    background: var(--primary);
+    border-radius: var(--radius);
+    padding: 40px 24px 32px;
+    text-align: center;
+    color: #fff;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hasil-hero::before {
+    content: '';
+    position: absolute; top: -50px; right: -50px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(200,135,58,0.15);
+  }
+  .nilai-label { font-size: 13px; color: rgba(255,255,255,0.6); margin-bottom: 8px; letter-spacing: 1px; text-transform: uppercase; }
+  .nilai-angka { font-family: 'Playfair Display', serif; font-size: 72px; font-weight: 700; color: var(--accent); line-height: 1; }
+  .nilai-persen { font-size: 28px; font-weight: 600; color: rgba(255,255,255,0.7); }
+  .nilai-predikat { font-size: 18px; font-weight: 600; color: #fff; margin-top: 10px; }
+
+  .hasil-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .stat-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px 12px;
+    text-align: center;
+  }
+  .stat-num { font-size: 28px; font-weight: 700; }
+  .stat-num.benar { color: var(--benar-border); }
+  .stat-num.salah { color: var(--salah-border); }
+  .stat-num.total { color: var(--primary); }
+  .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  .btn-ulang {
+    width: 100%;
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .btn-ulang:hover { background: #A06820; transform: translateY(-1px); }
+  .btn-ulang:active { transform: translateY(0); }
+
+  /* FOOTER */
+  .site-footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 12px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    margin-top: 20px;
+  }
+
+  @media (max-width: 480px) {
+    .soal-card { padding: 16px; }
+    .hasil-stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .stat-num { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-badge">Sejarah Kelas XI SMK</div>
+  <h1>Kuis Sumatif 4</h1>
+  <p>Pendudukan Jepang & Persiapan Kemerdekaan Indonesia</p>
+</header>
+
+<div class="progress-section">
+  <span class="progress-label" id="progress-label">Soal 1 / 50</span>
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+  <span class="progress-pct" id="progress-pct">0%</span>
+</div>
+
+<main class="main">
+  <div id="area-soal"></div>
+  <div class="hasil-wrap" id="area-hasil">
+    <div class="hasil-hero">
+      <div class="nilai-label">Nilai Akhir</div>
+      <div><span class="nilai-angka" id="hasil-pct">0</span><span class="nilai-persen">%</span></div>
+      <div class="nilai-predikat" id="hasil-predikat"></div>
+    </div>
+    <div class="hasil-stats">
+      <div class="stat-box"><div class="stat-num benar" id="hasil-benar">0</div><div class="stat-label">Benar</div></div>
+      <div class="stat-box"><div class="stat-num salah" id="hasil-salah">0</div><div class="stat-label">Salah</div></div>
+      <div class="stat-box"><div class="stat-num total" id="hasil-total">0</div><div class="stat-label">Total Soal</div></div>
+    </div>
+    <button class="btn-ulang" onclick="ulang()">🔄 Ulangi Kuis (Soal Diacak Ulang)</button>
+  </div>
+</main>
+
+<footer class="site-footer">
+  Kuis Sejarah Kelas XI SMK — Sumatif 4 &nbsp;|&nbsp; Soal diacak otomatis setiap sesi
+</footer>
+
+<script>
+const rawSoal = [
+  {q:"Setelah berhasil mengalahkan pasukan Belanda pada Perang Pasifik, Jepang secara resmi menduduki wilayah Indonesia pada awal tahun 1942. Kebijakan apa yang paling banyak menimbulkan penderitaan rakyat Indonesia selama masa pendudukan Jepang tersebut?",opsi:["Pembentukan organisasi keagamaan","Pelaksanaan kerja paksa Romusha","Pendidikan bahasa Jepang","Pembentukan Seinendan","Penyebaran agama Shinto"],jawab:1},
+  {q:"Jepang menduduki Indonesia dengan tujuan utama untuk mendukung kelancaran Perang Pasifik melawan Sekutu. Salah satu dampak positif dari pendudukan Jepang bagi bangsa Indonesia adalah…",opsi:["Meningkatnya jumlah korban jiwa akibat kelaparan","Tumbuhnya semangat nasionalisme dan kesadaran politik rakyat Indonesia","Hancurnya total perekonomian rakyat Indonesia","Hilangnya kepercayaan terhadap tokoh-tokoh nasional","Bertambahnya wilayah koloni Belanda di Indonesia"],jawab:1},
+  {q:"Pada tanggal 29 April 1945, Jepang membentuk sebuah badan untuk mempersiapkan kemerdekaan Indonesia sebagai bentuk janji Koiso. Badan tersebut adalah…",opsi:["PPKI","BPUPKI","KNIP","Putera","Jawa Hokokai"],jawab:1},
+  {q:"Pada sidang pertama BPUPKI yang berlangsung tanggal 29 Mei hingga 1 Juni 1945, Ir. Soekarno menyampaikan pidato yang sangat penting. Pidato tersebut berisi…",opsi:["Piagam Jakarta","Rumusan Dasar Negara Pancasila","Rancangan bentuk negara federal","Struktur pemerintahan kerajaan","Pembagian wilayah Indonesia menjadi beberapa provinsi"],jawab:1},
+  {q:"Peristiwa Rengasdengklok terjadi pada tanggal 16 Agustus 1945, di mana sekelompok pemuda menculik Soekarno dan Hatta. Apa tujuan utama dari peristiwa tersebut?",opsi:["Melindungi Soekarno dan Hatta dari ancaman Sekutu","Memaksa Soekarno dan Hatta segera memproklamasikan kemerdekaan Indonesia","Menyerahkan Soekarno dan Hatta kepada pasukan Jepang","Membawa Soekarno dan Hatta ke pengasingan di luar negeri","Melatih Soekarno dan Hatta dalam strategi perang gerilya"],jawab:1},
+  {q:"Setelah peristiwa Rengasdengklok, Soekarno dan Hatta dibawa kembali ke Jakarta oleh seorang tokoh nasional. Siapakah tokoh yang berhasil membawa mereka kembali tersebut?",opsi:["Wikana","Achmad Soebardjo","Sutan Sjahrir","Sukarni","Laksamana Maeda"],jawab:1},
+  {q:"Pada tanggal berapakah PPKI resmi dibentuk?",opsi:["7 Agustus 1945","9 Agustus 1945","12 Agustus 1945","14 Agustus 1945","17 Agustus 1945"],jawab:0},
+  {q:"Salah satu tugas penting PPKI adalah…",opsi:["Menyusun program kerja partai politik","Mengesahkan Undang-Undang Dasar 1945","Membentuk tentara Sekutu di Indonesia","Melakukan perundingan dengan Belanda","Menyebarkan propaganda Jepang"],jawab:1},
+  {q:"Siapakah yang mengetik naskah Proklamasi Kemerdekaan Indonesia pada 17 Agustus 1945?",opsi:["Ir. Soekarno","Sayuti Melik","Drs. Mohammad Hatta","Fatmawati","Sukarni"],jawab:1},
+  {q:"Kapan pembubaran BPUPKI terjadi?",opsi:["7 Agustus 1945","9 Agustus 1945","11 Agustus 1945","15 Agustus 1945","18 Agustus 1945"],jawab:0},
+  {q:"Pada sidang PPKI tanggal 18 Agustus 1945, salah satu keputusan penting yang dihasilkan adalah…",opsi:["Pembentukan KNIP","Pengesahan Undang-Undang Dasar 1945","Pembentukan partai politik nasional","Pemilihan anggota DPR","Pembentukan Tentara Republik Indonesia"],jawab:1},
+  {q:"Nilai penting dari peristiwa Rengasdengklok adalah…",opsi:["Membuktikan kekuatan militer Jepang di Indonesia","Menunjukkan peran aktif pemuda dalam mendorong proklamasi kemerdekaan","Menjadi bukti kegagalan diplomasi Soekarno-Hatta","Tempat pertama kali Pancasila dirumuskan","Menjadi awal pembentukan BPUPKI"],jawab:1},
+  {q:"Salah satu anggota PPKI yang mewakili golongan pemuda adalah…",opsi:["Soepomo","Soekarno","Wikana","A.A. Maramis","Abikoesno Tjokrosoejoso"],jawab:2},
+  {q:"Janji kemerdekaan yang diberikan Perdana Menteri Jepang Kuniaki Koiso kepada bangsa Indonesia dikenal dengan sebutan…",opsi:["Janji Tojo","Janji Koiso","Janji Tanaka","Janji Yamamoto","Janji Maeda"],jawab:1},
+  {q:"Kebijakan ekonomi perang Jepang yang paling memberatkan rakyat antara lain…",opsi:["Pelarangan penggunaan bahasa Indonesia","Pelaksanaan Romusha secara besar-besaran","Pembangunan infrastruktur secara merata","Pemberian bantuan pangan gratis","Penghapusan sistem tanam paksa"],jawab:1},
+  {q:"Di mana teks Proklamasi Kemerdekaan pertama kali diketik sebelum dibacakan?",opsi:["Rumah Laksamana Maeda","Gedung BPUPKI","Rengasdengklok","Lapangan Ikada","Istana Merdeka"],jawab:0},
+  {q:"Berikut ini merupakan dampak negatif dari masa pendudukan Jepang di Indonesia, kecuali…",opsi:["Banyaknya korban jiwa akibat Romusha","Tumbuhnya semangat nasionalisme","Hancurnya perekonomian rakyat","Terjadinya kelaparan massal","Penindasan terhadap rakyat Indonesia"],jawab:1},
+  {q:"Pada sidang PPKI tanggal 19 Agustus 1945, keputusan yang diambil adalah…",opsi:["Pengesahan Pancasila sebagai dasar negara","Pembentukan Komite Nasional Indonesia Pusat (KNIP)","Pemilihan presiden pertama","Penyusunan Piagam Jakarta","Pembentukan Tentara Keamanan Rakyat"],jawab:1},
+  {q:"Mengapa pemuda memilih lokasi Rengasdengklok untuk menculik Soekarno dan Hatta?",opsi:["Karena lokasinya dekat dengan markas Jepang","Agar Soekarno dan Hatta terisolasi dari pengaruh Jepang dan bisa segera memproklamasikan kemerdekaan","Karena tempat tersebut merupakan basis militer Sekutu","Untuk menghindari serangan udara Sekutu","Karena lokasinya strategis untuk melarikan diri ke luar negeri"],jawab:1},
+  {q:"Siapakah yang ikut serta menandatangani naskah Proklamasi selain Soekarno dan Hatta?",opsi:["Sayuti Melik","Sukarni","Wikana","Achmad Soebardjo","Tidak ada pihak lain yang ikut menandatangani"],jawab:4},
+  {q:"Strategi yang digunakan Jepang dalam memasuki wilayah Indonesia adalah...",opsi:["Jepang langsung menyerang Batavia sebagai pusat pemerintahan Hindia Belanda","Jepang masuk secara bertahap dari wilayah-wilayah pinggiran terlebih dahulu sambil menyesuaikan diri dengan kekuatan pertahanan Belanda","Jepang menggunakan jalur laut secara langsung menuju Pulau Jawa","Jepang bekerja sama dengan tokoh nasionalis untuk melemahkan Belanda dari dalam","Jepang menyerang seluruh wilayah Indonesia secara serentak pada 11 Januari 1942"],jawab:1},
+  {q:"Kota pertama yang berhasil dikuasai Jepang pada tanggal 11 Januari 1942 adalah...",opsi:["Balikpapan (Kalimantan Timur)","Pontianak (Kalimantan Barat)","Tarakan (Kalimantan Timur)","Samarinda (Kalimantan Timur)","Banjarmasin (Kalimantan Selatan)"],jawab:2},
+  {q:"Pernyataan yang paling tepat menggambarkan kondisi romusha di Indonesia adalah...",opsi:["Romusha merupakan program kerja sukarela dengan imbalan upah yang layak","Romusha hanya diberlakukan di Pulau Jawa","Romusha adalah sistem kerja paksa tanpa upah memadai untuk kepentingan perang Jepang","Romusha diberlakukan sebagai hukuman kolektif bagi yang tidak kooperatif","Romusha merupakan program pelatihan kerja"],jawab:2},
+  {q:"Urutan penguasaan wilayah yang benar berdasarkan kronologi Januari–Februari 1942 adalah...",opsi:["Tarakan → Balikpapan → Pontianak → Samarinda → Ambon → Banjarmasin → Palembang","Tarakan → Pontianak → Balikpapan → Ambon → Samarinda → Palembang → Banjarmasin","Balikpapan → Tarakan → Samarinda → Pontianak → Banjarmasin → Ambon → Palembang","Pontianak → Tarakan → Balikpapan → Samarinda → Palembang → Ambon → Banjarmasin","Tarakan → Samarinda → Balikpapan → Pontianak → Palembang → Banjarmasin → Ambon"],jawab:0},
+  {q:"Titik-titik pendaratan Jepang di Pulau Jawa pada 28 Februari 1942 adalah...",opsi:["Surabaya, Cirebon, dan Semarang","Teluk Banten, Eretan Wetan (Jawa Barat), dan Kragen (Jawa Tengah)","Merak, Indramayu, dan Rembang","Anyer, Karawang, dan Pati","Batavia, Bandung, dan Yogyakarta"],jawab:1},
+  {q:"Tujuan utama dibentuknya organisasi semi militer oleh Jepang di Indonesia adalah...",opsi:["Memberikan pendidikan militer agar Indonesia bisa membentuk angkatan bersenjata sendiri","Menunjukkan dukungan Jepang terhadap kemerdekaan bangsa Asia","Memanfaatkan tenaga dan SDM Indonesia untuk perang melawan Sekutu sekaligus mengawasi rakyat","Mempersiapkan Indonesia sebagai negara merdeka","Menciptakan lapangan kerja bagi pemuda"],jawab:2},
+  {q:"Perubahan mendasar dalam sistem pendidikan Indonesia pada masa penjajahan Jepang dibandingkan masa Belanda adalah...",opsi:["Jepang menutup seluruh sekolah di Indonesia","Jepang menghapus sistem pendidikan diskriminatif berdasarkan kelas sosial dan ras, serta mewajibkan bahasa Jepang dan Indonesia","Jepang memperluas akses pendidikan khusus bagi golongan bangsawan","Jepang mendirikan universitas-universitas baru di seluruh Indonesia","Jepang mempertahankan sistem pendidikan Belanda namun mengganti kurikulumnya"],jawab:1},
+  {q:"Faktor utama yang mendorong rakyat Indonesia melakukan perlawanan terhadap pendudukan Jepang adalah...",opsi:["Rasa dikhianati karena janji kemerdekaan tidak ditepati","Adanya tekanan ekonomi berat akibat romusha, pengambilan hasil bumi paksa, dan penderitaan rakyat","Pengaruh gerakan kemerdekaan di negara-negara Asia lainnya","Dukungan dari pemerintah Belanda yang mendanai kelompok perlawanan","Perintah langsung dari Soekarno dan Hatta"],jawab:1},
+  {q:"Salah satu dampak positif pendudukan Jepang yang masih dapat diamati dalam kehidupan berbangsa Indonesia adalah...",opsi:["Berkembangnya sistem perkebunan besar warisan Jepang","Terbentuknya jaringan infrastruktur jalan raya dan rel kereta api","Pengalaman organisasi semi militer bentukan Jepang menjadi cikal bakal TNI","Meluasnya penggunaan bahasa Jepang di Indonesia","Berkembangnya tradisi seni budaya Jepang"],jawab:2},
+  {q:"Perubahan kondisi sosial budaya yang paling dirasakan masyarakat Indonesia pada masa pendudukan Jepang adalah...",opsi:["Masyarakat semakin sejahtera karena lapangan kerja baru","Masyarakat mengalami penderitaan berat akibat romusha, kekurangan pangan, sandang, dan kebutuhan pokok","Masyarakat mengalami kemajuan pesat di bidang kesehatan","Masyarakat semakin terbuka terhadap budaya asing","Masyarakat memperoleh kebebasan berpolitik yang lebih luas"],jawab:1},
+  {q:"Kondisi-kondisi yang melanda Hindia Belanda menjelang tahun 1942 adalah...",opsi:["Terjadinya pemberontakan besar-besaran rakyat","Terjadi krisis Malaise, pembungkaman pergerakan pemuda, dan krisis kepercayaan","Ketegangan antara Belanda dan Inggris memperebutkan pengaruh","Terjadinya bencana alam besar di berbagai wilayah","Kekosongan kepemimpinan akibat penarikan pejabat Belanda ke negeri asalnya"],jawab:1},
+  {q:"Tujuan awal kedatangan orang-orang Jepang ke Hindia Belanda pada periode 1938–1939 adalah...",opsi:["Melakukan kegiatan mata-mata untuk memetakan kekuatan militer Belanda","Berinvestasi kepada pemerintah Hindia Belanda","Membangun pangkalan militer secara rahasia","Menjalin hubungan diplomatik resmi","Menyebarkan propaganda kepada rakyat Indonesia"],jawab:0},
+  {q:"Salah satu potensi yang menjadikan Hindia Belanda sebagai pusat minyak yang diminati Jepang adalah...",opsi:["Teknologi pengilangan minyak paling canggih di Asia Tenggara","Minyak bumi Hindia Belanda diperlukan sebagai bahan bakar kapal perang Jepang, dengan ekspedisi minyak di Sumatra, Kalimantan, dan Jawa","Cadangan minyak bumi terbesar di dunia","Perusahaan minyak Jepang sudah menguasai ladang minyak Hindia Belanda","Hindia Belanda bersedia menjual cadangan minyak akibat krisis Malaise"],jawab:1},
+  {q:"Alasan Jepang membutuhkan sumber daya manusia dari Hindia Belanda untuk kepentingan perangnya adalah...",opsi:["Keahlian tinggi bidang teknologi persenjataan modern","Kekurangan tenaga ahli navigasi laut","Jepang membutuhkan banyak pasukan di garis depan dan pembuat senjata/kendaraan perang","Rakyat Hindia Belanda terbiasa dengan kondisi perang","Bersedia menerima upah jauh lebih rendah"],jawab:2},
+  {q:"Peran Jepang dalam hubungannya dengan komoditas ekspor Hindia Belanda adalah...",opsi:["Jepang menjadi produsen utama komoditas yang sama","Jepang menjadi pemasok teknologi pengolahan komoditas","Jepang menjadi negara utama tujuan ekspor dan pesaing negara-negara Eropa di Hindia Belanda","Jepang menjadi perantara perdagangan antar negara Asia","Jepang satu-satunya yang bersedia membeli saat negara Eropa memboikot"],jawab:2},
+  {q:"Alasan utama rakyat Indonesia menerima kedatangan Jepang dengan baik adalah...",opsi:["Jepang memberikan janji kemerdekaan secara resmi","Propaganda Jepang berhasil menarik simpati dengan mengklaim sebagai saudara tua yang membebaskan Indonesia dari Belanda","Jepang membuktikan kemampuan militer mengalahkan Belanda dalam waktu singkat","Rakyat Indonesia sudah lama menjalin hubungan perdagangan dengan Jepang","Jepang membawa bantuan pangan dan obat-obatan"],jawab:1},
+  {q:"Isi dari semboyan 3A yang dikumandangkan Jepang adalah...",opsi:["Jepang pemimpin Asia, pelindung Asia, dan cahaya Asia","Jepang cahaya Asia, pelindung Asia, dan pemimpin Asia","Jepang saudara Asia, pemimpin Asia, dan penyelamat Asia","Jepang cahaya Asia, pejuang Asia, dan pelindung Asia","Jepang pemimpin Asia, pejuang Asia, dan saudara Asia"],jawab:1},
+  {q:"Tindakan Jepang yang berkaitan dengan penggunaan media radio untuk menarik simpati rakyat Indonesia adalah...",opsi:["Mendirikan stasiun radio baru dan mewajibkan tiap rumah punya radio","Radio Tokyo memperdengarkan lagu 'Indonesia Raya' selain 'Kimigayo'","Menggunakan radio untuk pidato tokoh nasionalis","Mengumumkan pembebasan tokoh nasionalis yang diasingkan Belanda","Menyiarkan berita kemenangan militer Jepang setiap hari"],jawab:1},
+  {q:"Tindakan Jepang terkait bendera yang menarik simpati rakyat Indonesia adalah...",opsi:["Menurunkan bendera Belanda dan menggantinya dengan Merah Putih","Bendera Merah Putih diizinkan berkibar berdampingan dengan bendera Jepang (Hinomaru)","Mewajibkan rakyat mengibarkan Merah Putih di depan rumah","Memberikan izin mengibarkan Merah Putih secara penuh tanpa bendera Jepang","Menggabungkan warna bendera Merah Putih dan Jepang"],jawab:1},
+  {q:"Tokoh-tokoh nasionalis Indonesia yang dibebaskan Jepang dari pengasingan adalah...",opsi:["Soekarno, Ki Hajar Dewantara, dan HOS Tjokroaminoto","Ir. Soekarno, Drs. Moh. Hatta, dan Sutan Syahrir","Soekarno, Hatta, dan KH. Agus Salim","Hatta, Syahrir, dan Tan Malaka","Soekarno, KH. Wahid Hasyim, dan Mohammad Natsir"],jawab:1},
+  {q:"Pernyataan yang paling tepat mengenai organisasi Seinendan adalah...",opsi:["Dibentuk untuk melatih wanita Indonesia dalam kemiliteran","Korps pembantu kepolisian berusia 23–25 tahun","Dibentuk untuk melatih pemuda usia 14–22 tahun sebagai tenaga cadangan perang, dengan 500.000 anggota","Pasukan semi militer beranggotakan kiai, santri, dan pemuda Islam","Bertugas menyebarkan propaganda Jepang"],jawab:2},
+  {q:"Pernyataan yang benar mengenai organisasi Keibodan adalah...",opsi:["Korps pelatihan militer khusus wanita berusia minimal 15 tahun","Bertugas sebagai korps pembantu kepolisian, berusia 23–25 tahun, dengan pelatihan satu bulan di Kepolisian Sukabumi","Pasukan militer pembantu berusia 18–25 tahun","Dibentuk pada 1 November 1944 dipimpin pemerintah militer Jepang","Berlatih intelijen dan mata-mata"],jawab:1},
+  {q:"Keunikan organisasi Fujinkai dibandingkan organisasi semi militer lainnya adalah...",opsi:["Anggotanya ulama dan santri pesantren","Korps pelatihan militer khusus wanita berusia minimal 15 tahun, bertugas di garis belakang merawat korban dan menanam pohon jarak","Anggotanya wanita bangsawan dan priyayi","Bertugas menyebarkan propaganda kepada ibu-ibu rumah tangga","Korps wanita khusus kemampuan medis pertolongan pertama"],jawab:1},
+  {q:"Pernyataan yang paling tepat mengenai Laskar Hizbullah adalah...",opsi:["Melatih pemuda berusia 14–22 tahun sebagai cadangan perang","Korps pembantu kepolisian berusia 23–25 tahun","Pasukan semi militer beranggotakan kiai, santri, dan pemuda Islam; didirikan 8 Desember 1944, dipimpin KH Zainul Arifin, berfungsi sebagai cadangan PETA","Organisasi militer resmi dibentuk 3 Oktober 1943","Organisasi semi militer wanita Muslim"],jawab:2},
+  {q:"Pernyataan yang paling tepat mengenai sistem pemerintahan Jepang pada masa Perang Dunia II adalah...",opsi:["Sistem presidensial dengan Kaisar sebagai kepala negara sekaligus pemerintahan","Sistem parlementer dengan Kaisar sebagai kepala negara dan perdana menteri sebagai kepala pemerintahan","Sistem monarki absolut","Sistem oligarki militer","Sistem diktator militer"],jawab:1},
+  {q:"Tentara wilayah yang bertanggung jawab atas wilayah Indonesia dan Singapura adalah...",opsi:["Tentara Ekspedisi Selatan","Tentara Wilayah 14","Tentara Wilayah 7","Tentara Wilayah 25","Tentara Ekspedisi Korea"],jawab:2},
+  {q:"Pernyataan yang paling tepat mengenai organisasi Heiho adalah...",opsi:["Dibentuk 3 Oktober 1943 sebagai pasukan gerilya","Pasukan militer pembantu berusia 18–25 tahun ditempatkan langsung dalam perang, di angkatan laut, darat, dan Kempetai, dengan sekitar 42.000 anggota","Membuka jabatan kepangkatan dari daidanco hingga giyuhei","Bertugas menjaga keamanan dalam negeri saja","Hanya menerima anggota berpendidikan minimal SMA"],jawab:1},
+  {q:"Pernyataan yang paling tepat mengenai pembentukan dan fungsi PETA adalah...",opsi:["Pasukan pembantu berusia 18–25 tahun di angkatan laut","PETA dibentuk 3 Oktober 1943 sebagai pasukan gerilya pembantu Jepang sekaligus membuka jabatan kepangkatan bagi rakyat Indonesia","Dibentuk 8 Desember 1944 beranggotakan kiai dan santri","Kelanjutan dari Seinendan","Dibentuk atas permintaan Soekarno dan Hatta"],jawab:1},
+  {q:"Pangkat yang dipegang oleh komandan batalyon dalam organisasi PETA disebut...",opsi:["Shodanco","Cudanco","Daidanco","Bundanco","Giyuhei"],jawab:2},
+  {q:"Alasan utama Jepang memilih pemuda Indonesia untuk memperkuat organisasi militernya adalah...",opsi:["Pengetahuan luas tentang medan perang","Loyalitas tinggi dan tidak akan memberontak","Fisik kuat, bersemangat, pemberani, dan jumlahnya banyak","Terbiasa dengan kondisi perang akibat perlawanan terhadap Belanda","Bersedia menerima upah lebih rendah"],jawab:2},
+  {q:"Faktor utama yang memicu perlawanan rakyat Aceh terhadap Jepang di Cot Plieng, Lhokseumawe (1942) adalah...",opsi:["Jepang memaksa rakyat Aceh menjadi romusha","Tentara Jepang tidak menghormati kehidupan umat muslim dan memaksa seikerei (penghormatan ke arah Dewa Matahari)","Penangkapan dan pengasingan seluruh ulama Aceh","Pelarangan kegiatan keagamaan Islam","Pemaksaan pembayaran pajak tinggi"],jawab:1},
+  {q:"Akhir dari perlawanan yang dipimpin Teuku Abdul Jalil adalah...",opsi:["Berhasil memukul mundur Jepang dari Lhokseumawe","Berhasil ditangkap dan diasingkan","Menyerah dan bersedia bekerja sama dengan Jepang","Melarikan diri ke pedalaman Aceh","Teuku Abdul Jalil gugur setelah tertembak pada 10 November 1942"],jawab:4},
+  {q:"Tindakan perlawanan yang dilakukan KH Zainal Mustafa dan pasukannya terhadap Jepang di Singaparna adalah...",opsi:["Menyerang markas militer Jepang secara langsung","Mogok kerja massal","Menyabotase, memutus kawat telepon, dan membebaskan para tahanan politik","Membakar fasilitas militer dan gudang logistik Jepang","Ceramah agama untuk menggerakkan rakyat Tasikmalaya"],jawab:2},
+  {q:"Latar belakang yang mendorong prajurit PETA di Blitar melakukan perlawanan terhadap Jepang (14 Februari 1945) adalah...",opsi:["Mengetahui rencana Jepang membubarkan PETA","Menyaksikan kesengsaraan rakyat akibat romusha, kelaparan, dan tidak tahan dengan sikap arogan tentara Jepang","Menerima informasi rahasia bahwa Jepang akan menyerahkan Indonesia ke Belanda","Diperintahkan menyerang sesama rakyat yang menolak pajak","Tidak menerima gaji dan perlengkapan perang"],jawab:1},
+  {q:"Tujuan utama perlawanan PETA terhadap Jepang di Blitar adalah...",opsi:["Membebaskan romusha di Pantai Selatan Jawa","Membuktikan kemampuan militer Indonesia mengalahkan Jepang","Menuntut Jepang memenuhi janji kemerdekaan","Mengusir pasukan Jepang dari Jawa Timur","Merebut kemerdekaan, ditandai prajurit merobek poster 'Indonesia Akan Merdeka' dan mengganti dengan 'Indonesia Sudah Merdeka'"],jawab:4},
+  {q:"Perdana Menteri Jepang yang mengeluarkan janji kemerdekaan kepada bangsa Indonesia pada tanggal 7 September 1944 adalah...",opsi:["Hideki Tojo","Koiso Kuniaki","Hirohito","Shigenori Togo","Mamoru Shigemitsu"],jawab:1},
+  {q:"Tugas utama BPUPKI yang dibentuk Jepang pada tahun 1945 adalah...",opsi:["Mempersiapkan pasukan militer Indonesia untuk membantu Jepang","Mengawasi jalannya pemerintahan militer Jepang","Menyelidiki dan mempersiapkan hal-hal penting untuk kemerdekaan Indonesia termasuk dasar negara dan UUD","Menyusun strategi diplomasi ke negara-negara Asia","Membentuk pemerintahan sementara Indonesia"],jawab:2},
+  {q:"Salah satu hasil penting dari sidang pertama PPKI (18 Agustus 1945) adalah...",opsi:["Membentuk TNI","Membagi wilayah Indonesia menjadi provinsi-provinsi","Mengesahkan UUD 1945, menetapkan Soekarno sebagai Presiden dan Hatta sebagai Wakil Presiden","Memutuskan pemilihan umum pertama dalam tiga bulan","Menetapkan Jakarta sebagai ibu kota negara"],jawab:2},
+  {q:"Tokoh dari golongan muda yang menjadi penggerak utama dalam peristiwa Rengasdengklok adalah...",opsi:["Soekarno dan Hatta","Ahmad Soebardjo dan Wikana","Sutan Syahrir, Wikana, Chaerul Saleh, dan Sukarni","Sayuti Melik dan Laksamana Maeda","Mohammad Yamin dan Ki Hajar Dewantara"],jawab:2},
+  {q:"Latar belakang utama yang mendorong terjadinya peristiwa Rengasdengklok adalah...",opsi:["Golongan muda tidak puas dengan susunan teks proklamasi","Jepang memerintahkan Soekarno dan Hatta segera memproklamasikan kemerdekaan","Setelah Jepang menyerah kepada Sekutu, golongan muda mendesak proklamasi segera namun golongan tua lebih hati-hati sehingga terjadi perbedaan pendapat","Golongan muda mendapat informasi Belanda akan segera kembali","Soekarno dan Hatta menolak karena belum mendapat restu seluruh tokoh nasionalis"],jawab:2}
+];
+
+const HURUF = ['A','B','C','D','E'];
+let soal = [], idx = 0, jwb = [], dijawab = false;
+
+function acak(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function predikat(p) {
+  if (p >= 90) return '🏆 Luar Biasa!';
+  if (p >= 80) return '⭐ Sangat Baik';
+  if (p >= 70) return '👍 Baik';
+  if (p >= 60) return '📚 Cukup';
+  return '💪 Perlu Belajar Lagi';
+}
+
+function updateProgress() {
+  const total = soal.length;
+  const pct = Math.round((idx / total) * 100);
+  document.getElementById('progress-label').textContent = `Soal ${Math.min(idx+1, total)} / ${total}`;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent = pct + '%';
+}
+
+function render() {
+  const total = soal.length;
+  if (idx >= total) {
+    showHasil();
+    return;
+  }
+  document.getElementById('area-hasil').style.display = 'none';
+  document.getElementById('area-soal').style.display = 'block';
+
+  const s = soal[idx];
+  dijawab = jwb[idx] !== -1;
+  updateProgress();
+
+  const pilihanHTML = s.opsi.map((o, i) => {
+    let cls = '';
+    if (dijawab) {
+      if (i === s.jawab) cls = ' benar';
+      else if (i === jwb[idx]) cls = ' salah';
+    }
+    return `<button class="opsi-btn${cls}" onclick="pilih(${i})" ${dijawab ? 'disabled' : ''}>
+      <span class="opsi-label">${HURUF[i]}.</span>
+      <span>${o}</span>
+    </button>`;
+  }).join('');
+
+  let feedbackHTML = '';
+  if (dijawab) {
+    const benar = jwb[idx] === s.jawab;
+    feedbackHTML = `<div class="feedback show ${benar ? 'benar' : 'salah'}">
+      ${benar ? '✓ Jawaban kamu benar!' : '✗ Jawaban salah. Jawaban yang benar: <strong>' + HURUF[s.jawab] + '. ' + s.opsi[s.jawab] + '</strong>'}
+    </div>`;
+  }
+
+  document.getElementById('area-soal').innerHTML = `
+    <div class="soal-card">
+      <div class="soal-meta">
+        <span class="soal-nomor-badge">Soal ${idx + 1} dari ${total}</span>
+      </div>
+      <div class="soal-text">${s.q}</div>
+      <div class="opsi-list">${pilihanHTML}</div>
+      ${feedbackHTML}
+    </div>
+    <div class="nav-row">
+      <button class="btn-nav" onclick="prev()" ${idx === 0 ? 'disabled' : ''}>← Sebelumnya</button>
+      <span class="soal-counter">${idx + 1} / ${total}</span>
+      <button class="btn-nav btn-next" onclick="next()" ${!dijawab ? 'disabled' : ''}>
+        ${idx === total - 1 ? 'Lihat Hasil →' : 'Selanjutnya →'}
+      </button>
+    </div>`;
+}
+
+function pilih(i) {
+  if (dijawab) return;
+  jwb[idx] = i;
+  dijawab = true;
+  render();
+}
+function next() { if (dijawab && idx < soal.length) { idx++; render(); } }
+function prev() { if (idx > 0) { idx--; render(); } }
+
+function showHasil() {
+  document.getElementById('area-soal').style.display = 'none';
+  const area = document.getElementById('area-hasil');
+  area.style.display = 'block';
+  const total = soal.length;
+  const benar = soal.filter((_, i) => jwb[i] === soal[i].jawab).length;
+  const salah = total - benar;
+  const pct = Math.round(benar / total * 100);
+  document.getElementById('hasil-pct').textContent = pct;
+  document.getElementById('hasil-predikat').textContent = predikat(pct);
+  document.getElementById('hasil-benar').textContent = benar;
+  document.getElementById('hasil-salah').textContent = salah;
+  document.getElementById('hasil-total').textContent = total;
+  document.getElementById('progress-fill').style.width = '100%';
+  document.getElementById('progress-pct').textContent = '100%';
+  document.getElementById('progress-label').textContent = 'Selesai!';
+}
+
+function ulang() {
+  soal = acak(rawSoal);
+  idx = 0;
+  jwb = new Array(soal.length).fill(-1);
+  dijawab = false;
+  document.getElementById('area-hasil').style.display = 'none';
+  document.getElementById('area-soal').style.display = 'block';
+  render();
+}
+
+// Init
+soal = acak(rawSoal);
+jwb = new Array(soal.length).fill(-1);
+render();
+</script>
+</body>
+</html>
